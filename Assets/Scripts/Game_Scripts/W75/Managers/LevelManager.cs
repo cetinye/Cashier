@@ -24,6 +24,7 @@ namespace Cashier
 		private Sprite chosenProductSp;
 
 		private List<int> pressedNumbers = new List<int>();
+		private bool enterPressed = false;
 
 		void OnEnable()
 		{
@@ -42,6 +43,12 @@ namespace Cashier
 
 		void StartGame()
 		{
+			Reset();
+			barcodeController.Reset();
+			product.Reset();
+			uiManager.ClearDigitalScreen();
+			uiManager.ClearProductOnCashbox();
+
 			AssignLevel();
 			SpawnProduct();
 		}
@@ -51,12 +58,18 @@ namespace Cashier
 			levelId = PlayerPrefs.GetInt("Cashier_LevelId", 1);
 			levelId = Mathf.Clamp(levelId, 1, levels.Count);
 			levelSO = levels[levelId - 1];
+
+			uiManager.SetLevelTime(levelSO.barcodeEntryTime);
 		}
 
 		void OnStateChanged()
 		{
 			switch (GameStateManager.GetGameState())
 			{
+				case GameState.Idle:
+					enterPressed = false;
+					break;
+
 				case GameState.ProductEnter:
 					Reset();
 					barcodeController.Reset();
@@ -80,6 +93,12 @@ namespace Cashier
 				case GameState.ProductExit:
 					uiManager.ClearDigitalScreen();
 					Number.isPressable = false;
+					break;
+
+				case GameState.TimesUp:
+					Number.isPressable = false;
+					uiManager.ClearDigitalScreen();
+					product.Exit().OnComplete(() => StartGame());
 					break;
 
 				case GameState.MemoryGame:
@@ -137,6 +156,11 @@ namespace Cashier
 			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
 				return;
 
+			if (!enterPressed)
+				enterPressed = true;
+
+			GameStateManager.SetGameState(GameState.Idle);
+
 			List<int> barcode = new List<int>(barcodeController.GetBarcode());
 
 			for (int i = 0; i < barcode.Count; i++)
@@ -160,7 +184,10 @@ namespace Cashier
 		private void Wrong()
 		{
 			Debug.Log("Wrong");
-			product.Exit().OnComplete(() => GameStateManager.SetGameState(GameState.ProductEnter));
+			product.Exit().OnComplete(() =>
+			{
+				StartGame();
+			});
 		}
 
 		private void Correct()
@@ -168,15 +195,16 @@ namespace Cashier
 			Debug.Log("Correct");
 			product.Exit().OnComplete(() =>
 			{
-				GameStateManager.SetGameState(GameState.ProductEnter);
 				levelId++;
 				PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+				StartGame();
 			});
 		}
 
 		private void Reset()
 		{
 			pressedNumbers.Clear();
+			enterPressed = false;
 		}
 	}
 }

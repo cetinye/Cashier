@@ -9,10 +9,16 @@ namespace Cashier
 {
 	public class UIManager : MonoBehaviour
 	{
+		[Header("Cashbox UI Elements")]
 		[SerializeField] private TMP_Text textOnCashbox;
 		[SerializeField] private TMP_Text textOnDigitalScreen;
 		[SerializeField] private Image prodOnCashbox;
 		[SerializeField] private float textOnCashboxFadeTime;
+
+		[Header("Timer Variables")]
+		[SerializeField] private TMP_Text timerText;
+		private float timer;
+		private float levelTime;
 
 		[Header("Character Animations")]
 		[SerializeField] private List<GameObject> characters = new List<GameObject>();
@@ -21,6 +27,28 @@ namespace Cashier
 		void Start()
 		{
 			PlayCharacterAnim();
+		}
+
+		void Update()
+		{
+			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
+				return;
+
+			timer -= Time.deltaTime;
+			timerText.text = ((int)timer).ToString();
+
+			if (timer < 0)
+			{
+				GameStateManager.SetGameState(GameState.TimesUp);
+				timer = levelTime;
+				timerText.text = "";
+			}
+		}
+
+		public void SetLevelTime(int value)
+		{
+			levelTime = value;
+			timer = levelTime;
 		}
 
 		public void SetCashboxTextState(bool value)

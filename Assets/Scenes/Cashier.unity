@@ -15473,6 +15473,7 @@ MonoBehaviour:
   textOnDigitalScreen: {fileID: 816733950}
   prodOnCashbox: {fileID: 582887541}
   textOnCashboxFadeTime: 0.5
+  timerText: {fileID: 414755112}
   characters:
   - {fileID: 621588897}
   - {fileID: 450233884}
