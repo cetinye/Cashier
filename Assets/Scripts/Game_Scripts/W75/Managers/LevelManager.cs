@@ -48,7 +48,7 @@ namespace Cashier
 
 		void AssignLevel()
 		{
-			// levelId = PlayerPrefs.GetInt("Cashier_LevelId", 1);
+			levelId = PlayerPrefs.GetInt("Cashier_LevelId", 1);
 			levelId = Mathf.Clamp(levelId, 1, levels.Count);
 			levelSO = levels[levelId - 1];
 		}
@@ -166,7 +166,12 @@ namespace Cashier
 		private void Correct()
 		{
 			Debug.Log("Correct");
-			product.Exit().OnComplete(() => GameStateManager.SetGameState(GameState.ProductEnter));
+			product.Exit().OnComplete(() =>
+			{
+				GameStateManager.SetGameState(GameState.ProductEnter);
+				levelId++;
+				PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+			});
 		}
 
 		private void Reset()

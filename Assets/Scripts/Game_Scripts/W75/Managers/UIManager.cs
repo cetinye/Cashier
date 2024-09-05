@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -11,6 +13,15 @@ namespace Cashier
 		[SerializeField] private TMP_Text textOnDigitalScreen;
 		[SerializeField] private Image prodOnCashbox;
 		[SerializeField] private float textOnCashboxFadeTime;
+
+		[Header("Character Animations")]
+		[SerializeField] private List<GameObject> characters = new List<GameObject>();
+		[SerializeField] Transform rightEdge, leftEdge;
+
+		void Start()
+		{
+			PlayCharacterAnim();
+		}
 
 		public void SetCashboxTextState(bool value)
 		{
@@ -41,6 +52,57 @@ namespace Cashier
 		public void ClearProductOnCashbox()
 		{
 			prodOnCashbox.DOFade(0f, textOnCashboxFadeTime);
+		}
+
+		private void PlayCharacterAnim()
+		{
+			StartCoroutine(StartCharAnims());
+		}
+
+		IEnumerator StartCharAnims()
+		{
+			for (int i = 0; i < characters.Count; i++)
+			{
+				StartCoroutine(CharacterAnim(characters[i]));
+				yield return new WaitForSeconds(1.33f);
+			}
+		}
+
+		IEnumerator CharacterAnim(GameObject character)
+		{
+			if (character.transform.localScale.x > 0)
+			{
+				Animator animController = character.GetComponent<Animator>();
+				animController.enabled = true;
+				Tween moveCharLeft = character.transform.DOLocalMove(leftEdge.localPosition, 7f);
+				yield return moveCharLeft.WaitForCompletion();
+				animController.enabled = false;
+
+				character.transform.localScale = new Vector3(-character.transform.localScale.x, character.transform.localScale.y, character.transform.localScale.z);
+				animController.enabled = true;
+				Tween moveCharRight = character.transform.DOLocalMove(rightEdge.localPosition, 7f);
+				yield return moveCharRight.WaitForCompletion();
+				animController.enabled = false;
+				character.transform.localScale = new Vector3(-character.transform.localScale.x, character.transform.localScale.y, character.transform.localScale.z);
+			}
+			else
+			{
+				Animator animController = character.GetComponent<Animator>();
+				animController.enabled = true;
+				Tween moveCharRight = character.transform.DOLocalMove(rightEdge.localPosition, 7f);
+				yield return moveCharRight.WaitForCompletion();
+				animController.enabled = false;
+
+				character.transform.localScale = new Vector3(-character.transform.localScale.x, character.transform.localScale.y, character.transform.localScale.z);
+				animController = character.GetComponent<Animator>();
+				animController.enabled = true;
+				Tween moveCharLeft = character.transform.DOLocalMove(leftEdge.localPosition, 7f);
+				yield return moveCharLeft.WaitForCompletion();
+				animController.enabled = false;
+				character.transform.localScale = new Vector3(-character.transform.localScale.x, character.transform.localScale.y, character.transform.localScale.z);
+			}
+
+			yield return CharacterAnim(character);
 		}
 	}
 }
