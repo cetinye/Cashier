@@ -23,6 +23,11 @@ namespace Cashier
 			prodImg.sprite = sprite;
 		}
 
+		public void Reset()
+		{
+			rect.anchoredPosition = enter.anchoredPosition;
+		}
+
 		public Tween Enter()
 		{
 			return rect.DOAnchorPos(middle.anchoredPosition, moveTime);

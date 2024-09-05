@@ -58,8 +58,12 @@ namespace Cashier
 			switch (GameStateManager.GetGameState())
 			{
 				case GameState.ProductEnter:
+					Reset();
+					barcodeController.Reset();
+					product.Reset();
 					uiManager.SetCashboxTextState(true);
 					uiManager.ClearDigitalScreen();
+					uiManager.ClearProductOnCashbox();
 					SpawnProduct();
 					break;
 
@@ -103,27 +107,71 @@ namespace Cashier
 
 		void GenerateBarcode()
 		{
+			int barcodeLength = levelSO.barcodeLength;
 			int maxBarcodeLength = levelSO.maxBarcodeLength;
 			BarcodeDigitOrder barcodeDigitOrder = (BarcodeDigitOrder)levelSO.barcodeDigitOrder;
 			BarcodeDisplayFormat barcodeDisplayFormat = (BarcodeDisplayFormat)levelSO.barcodeDisplayFormat;
-			barcodeController.SetBarcode(CreateBarcode(), maxBarcodeLength, barcodeDigitOrder, barcodeDisplayFormat);
-			barcodeController.Generate();
-		}
-
-		private List<int> CreateBarcode()
-		{
-			List<int> barcode = new List<int>();
-			for (int i = 0; i < levelSO.barcodeLength; i++)
-			{
-				barcode.Add(Random.Range(0, 10));
-			}
-			return barcode;
+			barcodeController.SetBarcode(barcodeLength, maxBarcodeLength, barcodeDigitOrder, barcodeDisplayFormat);
 		}
 
 		public void NumberPressed(int number)
 		{
 			pressedNumbers.Add(number);
 			uiManager.AddToDigitalScreen(number);
+		}
+
+		public void Delete()
+		{
+			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
+				return;
+
+			if (pressedNumbers.Count > 0)
+			{
+				pressedNumbers.RemoveAt(pressedNumbers.Count - 1);
+				uiManager.DeleteLastDigit();
+			}
+		}
+
+		public void Check()
+		{
+			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
+				return;
+
+			List<int> barcode = new List<int>(barcodeController.GetBarcode());
+
+			for (int i = 0; i < barcode.Count; i++)
+			{
+				if (pressedNumbers.Count != barcode.Count)
+				{
+					Wrong();
+					return;
+				}
+
+				if (barcode[i] != pressedNumbers[i])
+				{
+					Wrong();
+					return;
+				}
+			}
+
+			Correct();
+		}
+
+		private void Wrong()
+		{
+			Debug.Log("Wrong");
+			product.Exit().OnComplete(() => GameStateManager.SetGameState(GameState.ProductEnter));
+		}
+
+		private void Correct()
+		{
+			Debug.Log("Correct");
+			product.Exit().OnComplete(() => GameStateManager.SetGameState(GameState.ProductEnter));
+		}
+
+		private void Reset()
+		{
+			pressedNumbers.Clear();
 		}
 	}
 }

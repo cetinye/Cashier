@@ -19,20 +19,33 @@ namespace Cashier
 		[SerializeField] private float grayTimeToFade;
 		private List<BarcodeDigit> barcodeDigits = new List<BarcodeDigit>();
 		private int barcodeLength;
+		private int maxBarcodeLength;
 		private BarcodeDigitOrder barcodeDigitOrder;
 		private BarcodeDisplayFormat barcodeDisplayFormat;
 
-		public void SetBarcode(List<int> barcode, int barcodeLength, BarcodeDigitOrder barcodeDigitOrder, BarcodeDisplayFormat barcodeDisplayFormat)
+		public void SetBarcode(int barcodeLength, int maxBarcodeLength, BarcodeDigitOrder barcodeDigitOrder, BarcodeDisplayFormat barcodeDisplayFormat)
 		{
-			this.barcode = new List<int>(barcode);
 			this.barcodeLength = barcodeLength;
+			this.maxBarcodeLength = maxBarcodeLength;
 			this.barcodeDigitOrder = barcodeDigitOrder;
 			this.barcodeDisplayFormat = barcodeDisplayFormat;
+			this.barcode = new List<int>(CreateBarcode());
+			Generate();
+		}
+
+		private List<int> CreateBarcode()
+		{
+			List<int> barcode = new List<int>();
+			for (int i = 0; i < barcodeLength; i++)
+			{
+				barcode.Add(Random.Range(1, 10));
+			}
+			return barcode;
 		}
 
 		public void Generate()
 		{
-			for (int i = 0; i < barcodeLength; i++)
+			for (int i = 0; i < maxBarcodeLength; i++)
 			{
 				BarcodeDigit digit = Instantiate(barcodeDigitPrefab, layoutGroup.transform);
 				barcodeDigits.Add(digit);
@@ -45,6 +58,11 @@ namespace Cashier
 			}
 
 			ShowBarcode();
+		}
+
+		public List<int> GetBarcode()
+		{
+			return barcode;
 		}
 
 		public void ShowBarcode()
@@ -74,7 +92,6 @@ namespace Cashier
 		{
 			Sequence s = DOTween.Sequence();
 			s.Append(grayPanel.DOFade(state ? 0.5f : 0, grayTimeToFade));
-			// s.Join(scanImg.DOFade(state ? 1 : 0, grayTimeToFade));
 			return s;
 		}
 
@@ -86,7 +103,7 @@ namespace Cashier
 			}
 		}
 
-		private void Reset()
+		public void Reset()
 		{
 			for (int i = 0; i < barcodeDigits.Count; i++)
 			{

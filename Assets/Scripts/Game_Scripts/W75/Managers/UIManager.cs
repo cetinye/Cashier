@@ -22,6 +22,11 @@ namespace Cashier
 			textOnDigitalScreen.text += value.ToString();
 		}
 
+		public void DeleteLastDigit()
+		{
+			textOnDigitalScreen.text = textOnDigitalScreen.text.Substring(0, textOnDigitalScreen.text.Length - 1);
+		}
+
 		public void ClearDigitalScreen()
 		{
 			textOnDigitalScreen.text = "";
