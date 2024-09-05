@@ -141,6 +141,8 @@ namespace Cashier
 
 			s = GrayPanel(false);
 			yield return s.WaitForCompletion();
+
+			GameStateManager.SetGameState(GameState.EnterBarcode);
 		}
 
 		IEnumerator ShowDoubleBarcodeRoutine()
@@ -205,6 +207,8 @@ namespace Cashier
 
 			s = GrayPanel(false);
 			yield return s.WaitForCompletion();
+
+			GameStateManager.SetGameState(GameState.EnterBarcode);
 		}
 
 		IEnumerator ShowTripleBarcodeRoutine()
@@ -289,6 +293,8 @@ namespace Cashier
 
 			s = GrayPanel(false);
 			yield return s.WaitForCompletion();
+
+			GameStateManager.SetGameState(GameState.EnterBarcode);
 		}
 
 		#endregion
