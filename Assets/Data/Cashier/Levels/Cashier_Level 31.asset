@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941f85e689130e5429f023ad58b7eac1, type: 3}
+  m_Name: Cashier_Level 31
+  m_EditorClassIdentifier: 
+  levelId: 31
+  numOfItemsDisplayedPerLevel: 10
+  maxBarcodeLength: 8
+  barcodeLength: 8
+  barcodeEntryTime: 8
+  barcodeDigitOrder: 2
+  barcodeDisplayFormat: 1
+  numOfQuestionsToLevelUp: 6
+  numOfQuestionsToLevelDown: 2
+  totalItemsShownInEndGame: 10
+  totalNumberOfFakeItems: 3
+  pointsPerCorrectAnswer: 432
+  maxInGame: 4322
+  penaltyPoints: 500
