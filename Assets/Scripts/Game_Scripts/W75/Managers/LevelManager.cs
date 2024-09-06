@@ -97,7 +97,7 @@ namespace Cashier
 
 				case GameState.TimesUp:
 					Number.isPressable = false;
-					uiManager.ClearDigitalScreen();
+					uiManager.GiveCashboxFeedback(false, true);
 					product.Exit().OnComplete(() => StartGame());
 					break;
 
@@ -181,23 +181,40 @@ namespace Cashier
 			Correct();
 		}
 
-		private void Wrong()
+		public void Correct()
 		{
-			Debug.Log("Wrong");
-			product.Exit().OnComplete(() =>
-			{
-				StartGame();
-			});
+			uiManager.GiveCashboxFeedback(true);
+
+			DOTween.Sequence()
+				.Append(product.transform.DOScale(350f, 0.5f))
+				.AppendInterval(0.3f)
+				.Append(product.transform.DOScale(300f, 0.3f))
+				.OnComplete(() =>
+				{
+					product.Exit().OnComplete(() =>
+					{
+						levelId++;
+						PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+						StartGame();
+					});
+				});
 		}
 
-		private void Correct()
+		public void Wrong()
 		{
-			Debug.Log("Correct");
-			product.Exit().OnComplete(() =>
+			float rotation = 15f;
+
+			uiManager.GiveCashboxFeedback(false);
+
+			Sequence seq = DOTween.Sequence()
+				.Append(product.transform.DORotate(new Vector3(0, 0, rotation), 0.1f))
+				.Append(product.transform.DORotate(new Vector3(0, 0, -rotation), 0.1f))
+				.SetLoops(2);
+
+			seq.OnComplete(() =>
 			{
-				levelId++;
-				PlayerPrefs.SetInt("Cashier_LevelId", levelId);
-				StartGame();
+				product.transform.DORotate(new Vector3(0, 0, 0), 0.2f);
+				product.Exit().OnComplete(() => StartGame());
 			});
 		}
 

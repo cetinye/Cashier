@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -13,7 +14,12 @@ namespace Cashier
 		[SerializeField] private TMP_Text textOnCashbox;
 		[SerializeField] private TMP_Text textOnDigitalScreen;
 		[SerializeField] private Image prodOnCashbox;
+		[SerializeField] private Image correctImg;
+		[SerializeField] private Image wrongImg;
 		[SerializeField] private float textOnCashboxFadeTime;
+		[SerializeField] private TMP_Text resultTxt;
+		[SerializeField] private Image resultSp;
+		[SerializeField] private GameObject resultPanel;
 
 		[Header("Timer Variables")]
 		[SerializeField] private TMP_Text timerText;
@@ -80,6 +86,41 @@ namespace Cashier
 		public void ClearProductOnCashbox()
 		{
 			prodOnCashbox.DOFade(0f, textOnCashboxFadeTime);
+		}
+
+		public void GiveCashboxFeedback(bool isCorrect, bool isTimesUp = false)
+		{
+			if (isCorrect)
+			{
+				correctImg.DOFade(1f, textOnCashboxFadeTime).OnComplete(() => correctImg.DOFade(0f, textOnCashboxFadeTime));
+				SetDigitalScreenText("CORRECT", new Color(0f, 1f, 0f), new Color(0f, 0.75f, 0f));
+			}
+			else
+			{
+				wrongImg.DOFade(1f, textOnCashboxFadeTime).OnComplete(() => wrongImg.DOFade(0f, textOnCashboxFadeTime));
+
+				if (isTimesUp)
+					SetDigitalScreenText("TIME'S UP", new Color(1f, 0f, 0f), new Color(0.75f, 0f, 0f));
+				else
+					SetDigitalScreenText("WRONG", new Color(1f, 0f, 0f), new Color(0.75f, 0f, 0f));
+			}
+		}
+
+		private void SetDigitalScreenText(string msg, Color color, Color color2)
+		{
+			ClearDigitalScreen();
+
+			resultTxt.text = msg;
+			resultTxt.color = Color.black;
+			resultSp.color = color;
+			resultPanel.SetActive(true);
+
+			Sequence seq = DOTween.Sequence()
+				  .Append(resultSp.DOColor(color, 0.2f))
+				  .Append(resultSp.DOColor(color2, 0.2f))
+				  .SetLoops(4);
+
+			seq.OnComplete(() => { resultPanel.SetActive(false); });
 		}
 
 		private void PlayCharacterAnim()

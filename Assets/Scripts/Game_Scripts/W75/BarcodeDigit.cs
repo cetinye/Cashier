@@ -19,7 +19,7 @@ namespace Cashier
 
 		public Tween Show()
 		{
-			return barcodeText.DOFade(1, textShowTime).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
+			return barcodeText.DOFade(1, textShowTime).SetEase(Ease.OutExpo).SetLoops(2, LoopType.Yoyo);
 		}
 
 		public Tween SetState(bool state, float timeToFade)
