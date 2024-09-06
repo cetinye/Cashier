@@ -30,11 +30,13 @@ namespace Cashier
 
 		public Tween Enter()
 		{
+			GameStateManager.SetGameState(GameState.ProductEnter);
 			return rect.DOAnchorPos(middle.anchoredPosition, moveTime);
 		}
 
 		public Tween Exit()
 		{
+			GameStateManager.SetGameState(GameState.ProductExit);
 			return rect.DOAnchorPos(exit.anchoredPosition, moveTime);
 		}
 	}

@@ -26,6 +26,10 @@ namespace Cashier
 
 		private List<int> pressedNumbers = new List<int>();
 		private bool enterPressed = false;
+		private int upCounter;
+		private int downCounter;
+		private int correct;
+		private int wrong;
 
 		void OnEnable()
 		{
@@ -82,7 +86,6 @@ namespace Cashier
 					uiManager.SetCashboxTextState(true);
 					uiManager.ClearDigitalScreen();
 					uiManager.ClearProductOnCashbox();
-					SpawnProduct();
 					break;
 
 				case GameState.BarcodeShow:
@@ -98,11 +101,13 @@ namespace Cashier
 				case GameState.ProductExit:
 					uiManager.ClearDigitalScreen();
 					Number.isPressable = false;
+					DecideLevel();
 					break;
 
 				case GameState.TimesUp:
 					Number.isPressable = false;
 					uiManager.GiveCashboxFeedback(false, true);
+					DecideLevel();
 					product.Exit().OnComplete(() => StartGame());
 					break;
 
@@ -190,6 +195,7 @@ namespace Cashier
 
 		public void Correct()
 		{
+			correct++;
 			uiManager.GiveCashboxFeedback(true);
 
 			DOTween.Sequence()
@@ -200,8 +206,6 @@ namespace Cashier
 				{
 					product.Exit().OnComplete(() =>
 					{
-						// levelId++;
-						PlayerPrefs.SetInt("Cashier_LevelId", levelId);
 						StartGame();
 					});
 				});
@@ -209,6 +213,7 @@ namespace Cashier
 
 		public void Wrong()
 		{
+			wrong++;
 			float rotation = 15f;
 
 			uiManager.GiveCashboxFeedback(false);
@@ -223,6 +228,56 @@ namespace Cashier
 				product.transform.DORotate(new Vector3(0, 0, 0), 0.2f);
 				product.Exit().OnComplete(() => StartGame());
 			});
+		}
+
+		private void DecideLevel()
+		{
+			upCounter = PlayerPrefs.GetInt("Cashier_UpCounter", 0);
+			downCounter = PlayerPrefs.GetInt("Cashier_DownCounter", 0);
+
+			if (wrong < levelSO.numOfQuestionsToLevelDown)
+			{
+				upCounter++;
+
+				if (upCounter >= levelSO.numOfQuestionsToLevelUp)
+				{
+					upCounter = 0;
+					downCounter = 0;
+					correct = 0;
+					wrong = 0;
+
+					levelId++;
+					levelId = Mathf.Clamp(levelId, 1, levels.Count);
+					Debug.Log($"Level changed to : {levelId}");
+					// gameScoreViewModel.level = level;
+					PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+				}
+			}
+			else
+			{
+				downCounter++;
+
+				if (downCounter >= levelSO.numOfQuestionsToLevelDown)
+				{
+					downCounter = 0;
+					upCounter = 0;
+					correct = 0;
+					wrong = 0;
+
+					levelId--;
+					levelId = Mathf.Clamp(levelId, 1, levels.Count);
+					Debug.Log($"Level changed to : {levelId}");
+					// gameScoreViewModel.level = level;
+					PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+				}
+			}
+
+			// Debug.Log($"upCounter : {upCounter}, downCounter : {downCounter}");
+			// Debug.Log($"correct : {correct}, wrong : {wrong}");
+			// Debug.Log($"numOfQuestionsToLevelUp : {levelSO.numOfQuestionsToLevelUp}, numOfQuestionsToLevelDown : {levelSO.numOfQuestionsToLevelDown}");
+
+			PlayerPrefs.SetInt("Cashier_UpCounter", upCounter);
+			PlayerPrefs.SetInt("Cashier_DownCounter", downCounter);
 		}
 
 		private void Reset()

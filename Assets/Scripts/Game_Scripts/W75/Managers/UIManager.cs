@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -10,6 +9,8 @@ namespace Cashier
 {
 	public class UIManager : MonoBehaviour
 	{
+		[SerializeField] private LevelManager levelManager;
+
 		[Header("Cashbox UI Elements")]
 		[SerializeField] private TMP_Text textOnCashbox;
 		[SerializeField] private TMP_Text textOnDigitalScreen;

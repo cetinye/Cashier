@@ -20,7 +20,7 @@ MonoBehaviour:
   barcodeDigitOrder: 1
   barcodeDisplayFormat: 1
   numOfQuestionsToLevelUp: 4
-  numOfQuestionsToLevelDown: 1
+  numOfQuestionsToLevelDown: 2
   totalItemsShownInEndGame: 8
   totalNumberOfFakeItems: 2
   pointsPerCorrectAnswer: 189

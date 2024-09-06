@@ -6019,6 +6019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 513a844cdff0e1b48ac4a21f7bfe93c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelManager: {fileID: 0}
   textOnCashbox: {fileID: 1221314828}
   textOnDigitalScreen: {fileID: 816733950}
   prodOnCashbox: {fileID: 582887541}
