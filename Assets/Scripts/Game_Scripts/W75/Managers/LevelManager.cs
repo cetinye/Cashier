@@ -22,6 +22,7 @@ namespace Cashier
 		[Header("Product")]
 		[SerializeField] private Product product;
 		private Sprite chosenProductSp;
+		private int totalShownProducts;
 
 		private List<int> pressedNumbers = new List<int>();
 		private bool enterPressed = false;
@@ -50,7 +51,11 @@ namespace Cashier
 			uiManager.ClearProductOnCashbox();
 
 			AssignLevel();
-			SpawnProduct();
+
+			if (totalShownProducts < levelSO.numOfItemsDisplayedPerLevel)
+				SpawnProduct();
+			else
+				GameStateManager.SetGameState(GameState.MemoryGame);
 		}
 
 		void AssignLevel()
@@ -102,6 +107,7 @@ namespace Cashier
 					break;
 
 				case GameState.MemoryGame:
+					uiManager.AddRandomSpritesToQuestion(levelSO.totalNumberOfFakeItems);
 					break;
 
 				case GameState.GameOver:
@@ -122,6 +128,7 @@ namespace Cashier
 			{
 				GameStateManager.SetGameState(GameState.BarcodeShow);
 			});
+			totalShownProducts++;
 		}
 
 		void GenerateBarcode()
@@ -193,7 +200,7 @@ namespace Cashier
 				{
 					product.Exit().OnComplete(() =>
 					{
-						levelId++;
+						// levelId++;
 						PlayerPrefs.SetInt("Cashier_LevelId", levelId);
 						StartGame();
 					});
@@ -222,6 +229,7 @@ namespace Cashier
 		{
 			pressedNumbers.Clear();
 			enterPressed = false;
+			uiManager.ClearLevelTimer();
 		}
 	}
 }

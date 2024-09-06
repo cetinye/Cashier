@@ -30,12 +30,39 @@ namespace Cashier
 		[SerializeField] private List<GameObject> characters = new List<GameObject>();
 		[SerializeField] Transform rightEdge, leftEdge;
 
+		[Header("Memory Panel")]
+		[SerializeField] private GameObject questionPanel;
+		[SerializeField] private Image questionProduct;
+		[SerializeField] private Image questionCorrect;
+		[SerializeField] private Image questionWrong;
+		[SerializeField] private RectTransform questionProductRect;
+		[SerializeField] private RectTransform questionProductPosStart;
+		[SerializeField] private RectTransform questionProductPos;
+		[SerializeField] private RectTransform questionProductPosEnd;
+		private bool isQuestionAnswerable = false;
+		private float questionTime;
+		private bool isQuestionTimerOn;
+		private bool questionCountdownLock;
+		private bool questionWrongFlag;
+		[SerializeField] private List<Sprite> productSprites = new List<Sprite>();
+		private List<Sprite> shownProducts = new List<Sprite>();
+		private List<Sprite> wrongProducts = new List<Sprite>();
+		private int shownProductIndex;
+		private int questionCorrectCount;
+		private int questionWrongCount;
+
 		void Start()
 		{
 			PlayCharacterAnim();
 		}
 
 		void Update()
+		{
+			QuestionCountdown();
+			LevelTimer();
+		}
+
+		private void LevelTimer()
 		{
 			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
 				return;
@@ -55,6 +82,11 @@ namespace Cashier
 		{
 			levelTime = value;
 			timer = levelTime;
+		}
+
+		public void ClearLevelTimer()
+		{
+			timerText.text = "";
 		}
 
 		public void SetCashboxTextState(bool value)
@@ -81,6 +113,7 @@ namespace Cashier
 		{
 			prodOnCashbox.sprite = sprite;
 			prodOnCashbox.DOFade(1f, textOnCashboxFadeTime);
+			AddToShownProducts(sprite);
 		}
 
 		public void ClearProductOnCashbox()
@@ -122,6 +155,142 @@ namespace Cashier
 
 			seq.OnComplete(() => { resultPanel.SetActive(false); });
 		}
+
+		#region Memory Panel
+
+		void ShowQuestionPanel()
+		{
+			questionProduct.color = new Color(255f, 255f, 255f, 0);
+			questionProductRect.anchoredPosition = questionProductPosStart.anchoredPosition;
+			questionPanel.SetActive(true);
+
+			questionProduct.DOFade(1, 0.25f);
+			questionProductRect.DOAnchorPos(questionProductPos.anchoredPosition, 0.5f).OnComplete(() =>
+			{
+				isQuestionAnswerable = true;
+				questionTime = 10f;
+				isQuestionTimerOn = true;
+				questionCountdownLock = false;
+			});
+
+			if (shownProducts.Count > shownProductIndex)
+				questionProduct.sprite = shownProducts[shownProductIndex];
+			else
+			{
+				// StartCoroutine(gameOver());
+				Debug.Log("Game Over");
+				UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+			}
+		}
+
+		public void CheckShownProduct(bool userChoice)
+		{
+			if (!isQuestionAnswerable) return;
+
+			isQuestionTimerOn = false;
+			isQuestionAnswerable = false;
+
+			if (!wrongProducts.Contains(questionProduct.sprite) == userChoice)
+			{
+				shownProductIndex++;
+				// W75_AudioManager.instance.PlayOneShot("CorrectOnPanel");
+				questionCorrectCount++;
+				questionCorrect.enabled = true;
+				questionCorrect.transform.DOShakePosition(0.3f, 0.5f);
+
+				questionProduct.DOFade(0, 0.25f);
+				questionProductRect.DOAnchorPos(questionProductPosEnd.anchoredPosition, 0.5f).OnComplete(() =>
+				{
+					ShowQuestionPanel();
+					questionCorrect.enabled = false;
+				});
+
+			}
+			else
+			{
+				shownProductIndex++;
+				// W75_AudioManager.instance.PlayOneShot("Wrong");
+				questionWrongCount++;
+
+				if (questionWrongFlag)
+				{
+					questionWrongFlag = false;
+					// LevelUp(false);
+				}
+
+				questionWrong.enabled = true;
+				questionWrong.transform.DOShakePosition(0.3f, 0.5f);
+
+				questionProduct.DOFade(0, 0.25f);
+				questionProductRect.DOAnchorPos(questionProductPosEnd.anchoredPosition, 0.5f).OnComplete(() =>
+				{
+					ShowQuestionPanel();
+					questionWrong.enabled = false;
+				});
+			}
+		}
+
+		public void AddToShownProducts(Sprite sprite)
+		{
+			if (shownProducts.Contains(sprite)) return;
+
+			shownProducts.Add(sprite);
+		}
+
+		public void AddRandomSpritesToQuestion(int amount)
+		{
+			for (int i = 0; i < amount; i++)
+			{
+				Sprite randProduct = productSprites[Random.Range(0, productSprites.Count)];
+
+				if (!shownProducts.Contains(randProduct))
+				{
+					wrongProducts.Add(randProduct);
+					shownProducts.Add(randProduct);
+				}
+				else
+					i--;
+			}
+
+			shownProducts.Shuffle();
+			ShowQuestionPanel();
+		}
+
+		private void QuestionCountdown()
+		{
+			if (GameStateManager.GetGameState() != GameState.MemoryGame)
+				return;
+
+			if (isQuestionTimerOn)
+			{
+				questionTime -= Time.deltaTime;
+				timerText.text = ((int)questionTime).ToString();
+
+				if (questionTime < 0)
+				{
+					isQuestionTimerOn = false;
+					questionCountdownLock = true;
+				}
+			}
+			else if (!isQuestionTimerOn && questionCountdownLock)
+			{
+				questionCountdownLock = false;
+				shownProductIndex++;
+				// W75_AudioManager.instance.PlayOneShot("Wrong");
+				questionWrong.enabled = true;
+				questionWrong.transform.DOShakePosition(0.3f, 0.5f);
+
+				questionProduct.DOFade(0, 0.25f);
+				questionProductRect.DOAnchorPos(questionProductPosEnd.anchoredPosition, 0.5f).OnComplete(() =>
+				{
+					ShowQuestionPanel();
+					questionWrong.enabled = false;
+				});
+				questionTime = 10f;
+			}
+		}
+
+		#endregion
 
 		private void PlayCharacterAnim()
 		{
@@ -172,6 +341,26 @@ namespace Cashier
 			}
 
 			yield return CharacterAnim(character);
+		}
+
+	}
+
+	public static class IListExtensions
+	{
+		/// <summary>
+		/// Shuffles the element order of the specified list.
+		/// </summary>
+		public static void Shuffle<T>(this IList<T> ts)
+		{
+			var count = ts.Count;
+			var last = count - 1;
+			for (var i = 0; i < last; ++i)
+			{
+				var r = UnityEngine.Random.Range(i, count);
+				var tmp = ts[i];
+				ts[i] = ts[r];
+				ts[r] = tmp;
+			}
 		}
 	}
 }
