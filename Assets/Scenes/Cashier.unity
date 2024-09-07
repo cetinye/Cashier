@@ -2197,7 +2197,7 @@ MonoBehaviour:
   grayPanel: {fileID: 1911473350}
   scanImg: {fileID: 859019969}
   barcodeTimeToFade: 0.5
-  grayTimeToFade: 0.5
+  grayTimeToFade: 0.25
 --- !u!1 &772149670
 GameObject:
   m_ObjectHideFlags: 0
@@ -2563,7 +2563,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &859019968
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4568,6 +4568,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1690600890}
+  - component: {fileID: 1690600891}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -4590,6 +4591,64 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2062452639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1690600891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690600889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5c1472a0a804c81122c1aa07d970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: 0
+    clip: {fileID: 8300000, guid: ff4343c1e847f6d45a32001d14142223, type: 3}
+    volume: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: 1
+    clip: {fileID: 8300000, guid: 2380afa4cde139b4398c70b691d0b4d5, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 2
+    clip: {fileID: 8300000, guid: d2fbd13ddcf4f4447aa66160d5e93e05, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 3
+    clip: {fileID: 8300000, guid: 5423dea1eb9e7ce47b35d3e67e7a7b02, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 4
+    clip: {fileID: 8300000, guid: 9ac9805511b6ae54191d315431899d7e, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 5
+    clip: {fileID: 8300000, guid: fde9098fa43f8bf4ba3ebb06e42aad71, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 6
+    clip: {fileID: 8300000, guid: 730baeea878a7354ba9e8243ebd4d068, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 7
+    clip: {fileID: 8300000, guid: 9b3f68bf7a783894680a53126791abb3, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 8
+    clip: {fileID: 8300000, guid: 30d876001bb41e44ea733fca45b2a7ce, type: 3}
+    volume: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &1760086360
 GameObject:
   m_ObjectHideFlags: 0

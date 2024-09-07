@@ -115,6 +115,11 @@ namespace Cashier
 			barcodePanel.SetActive(false);
 		}
 
+		public void SetScanImage(bool state)
+		{
+			scanImg.gameObject.SetActive(state);
+		}
+
 		#region Routines
 
 		IEnumerator ShowSingleBarcodeRoutine()
@@ -143,12 +148,19 @@ namespace Cashier
 					{
 						indexToShow = Random.Range(0, barcode.Count);
 					} while (shownIndexes.Contains(indexToShow));
+					shownIndexes.Add(indexToShow);
+				}
+				else
+				{
+					shownIndexes.Add(indexToShow);
 				}
 
 				// show digit
-				shownIndexes.Add(indexToShow);
+				AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 				Tween t = barcodeDigits[indexToShow].Show();
 				yield return t.WaitForCompletion();
+
+				yield return new WaitForSeconds(0.2f);
 			}
 
 			b = SetBarcodeState(false);
@@ -189,6 +201,7 @@ namespace Cashier
 					{
 						indexToShow_1 = Random.Range(0, barcode.Count);
 					} while (shownIndexes.Contains(indexToShow_1));
+					shownIndexes.Add(indexToShow_1);
 
 					if (indexToShow_2 <= barcode.Count - 1)
 					{
@@ -196,18 +209,29 @@ namespace Cashier
 						{
 							indexToShow_2 = Random.Range(0, barcode.Count);
 						} while (shownIndexes.Contains(indexToShow_2));
+						shownIndexes.Add(indexToShow_2);
 					}
 				}
+				else
+				{
+					shownIndexes.Add(indexToShow_1);
+					shownIndexes.Add(indexToShow_2);
+				}
+
+				// play related sound
+				if (indexToShow_1 <= barcode.Count - 1 && indexToShow_2 <= barcode.Count - 1)
+					AudioManager.instance.PlayOneShot(SoundType.TwoNumber);
+
+				else if (indexToShow_1 <= barcode.Count - 1)
+					AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 
 				// show digit
-				shownIndexes.Add(indexToShow_1);
-				shownIndexes.Add(indexToShow_2);
 				Tween t_1 = barcodeDigits[indexToShow_1].Show();
 
 				if (indexToShow_2 <= barcode.Count - 1)
 				{
 					// time to wait before showing other digit
-					yield return new WaitForSeconds(0.5f);
+					yield return new WaitForSeconds(0.28f);
 					Tween t_2 = barcodeDigits[indexToShow_2].Show();
 					yield return t_2.WaitForCompletion();
 				}
@@ -215,6 +239,8 @@ namespace Cashier
 				{
 					yield return t_1.WaitForCompletion();
 				}
+
+				yield return new WaitForSeconds(0.2f);
 			}
 
 			b = SetBarcodeState(false);
@@ -256,6 +282,7 @@ namespace Cashier
 					{
 						indexToShow_1 = Random.Range(0, barcode.Count);
 					} while (shownIndexes.Contains(indexToShow_1));
+					shownIndexes.Add(indexToShow_1);
 
 					if (indexToShow_2 <= barcode.Count - 1)
 					{
@@ -263,6 +290,7 @@ namespace Cashier
 						{
 							indexToShow_2 = Random.Range(0, barcode.Count);
 						} while (shownIndexes.Contains(indexToShow_2));
+						shownIndexes.Add(indexToShow_2);
 					}
 
 					if (indexToShow_3 <= barcode.Count - 1)
@@ -271,24 +299,38 @@ namespace Cashier
 						{
 							indexToShow_3 = Random.Range(0, barcode.Count);
 						} while (shownIndexes.Contains(indexToShow_3));
+						shownIndexes.Add(indexToShow_3);
 					}
 				}
+				else
+				{
+					shownIndexes.Add(indexToShow_1);
+					shownIndexes.Add(indexToShow_2);
+					shownIndexes.Add(indexToShow_3);
+				}
+
+				// play related sound
+				if (indexToShow_1 <= barcode.Count - 1 && indexToShow_2 <= barcode.Count - 1 && indexToShow_3 <= barcode.Count - 1)
+					AudioManager.instance.PlayOneShot(SoundType.ThreeNumber);
+
+				else if (indexToShow_1 <= barcode.Count - 1 && indexToShow_2 <= barcode.Count - 1)
+					AudioManager.instance.PlayOneShot(SoundType.TwoNumber);
+
+				else if (indexToShow_1 <= barcode.Count - 1)
+					AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 
 				// show digit
-				shownIndexes.Add(indexToShow_1);
-				shownIndexes.Add(indexToShow_2);
-				shownIndexes.Add(indexToShow_3);
 				Tween t_1 = barcodeDigits[indexToShow_1].Show();
 
 				if (indexToShow_2 <= barcode.Count - 1)
 				{
 					// time to wait before showing other digit
-					yield return new WaitForSeconds(0.25f);
+					yield return new WaitForSeconds(0.28f);
 					Tween t_2 = barcodeDigits[indexToShow_2].Show();
 
 					if (indexToShow_3 <= barcode.Count - 1)
 					{
-						yield return new WaitForSeconds(0.25f);
+						yield return new WaitForSeconds(0.28f);
 						Tween t_3 = barcodeDigits[indexToShow_3].Show();
 						yield return t_3.WaitForCompletion();
 					}
@@ -301,6 +343,8 @@ namespace Cashier
 				{
 					yield return t_1.WaitForCompletion();
 				}
+
+				yield return new WaitForSeconds(0.2f);
 			}
 
 			b = SetBarcodeState(false);

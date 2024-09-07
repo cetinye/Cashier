@@ -51,6 +51,7 @@ namespace Cashier
 		private int shownProductIndex;
 		private int questionCorrectCount;
 		private int questionWrongCount;
+		private Sequence digitalScreenSeq;
 
 		void Start()
 		{
@@ -92,6 +93,7 @@ namespace Cashier
 
 		public void SetCashboxTextState(bool value)
 		{
+			textOnCashbox.text = "Enter\nthe Barcode";
 			textOnCashbox.DOFade(value ? 1f : 0f, textOnCashboxFadeTime);
 		}
 
@@ -134,7 +136,10 @@ namespace Cashier
 				wrongImg.DOFade(1f, textOnCashboxFadeTime).OnComplete(() => wrongImg.DOFade(0f, textOnCashboxFadeTime));
 
 				if (isTimesUp)
+				{
+					AudioManager.instance.PlayOneShot(SoundType.TimesUp);
 					SetDigitalScreenText("TIME'S UP", new Color(1f, 0f, 0f), new Color(0.75f, 0f, 0f));
+				}
 				else
 					SetDigitalScreenText("WRONG", new Color(1f, 0f, 0f), new Color(0.75f, 0f, 0f));
 			}
@@ -149,12 +154,12 @@ namespace Cashier
 			resultSp.color = color;
 			resultPanel.SetActive(true);
 
-			Sequence seq = DOTween.Sequence()
+			digitalScreenSeq = DOTween.Sequence()
 				  .Append(resultSp.DOColor(color, 0.2f))
 				  .Append(resultSp.DOColor(color2, 0.2f))
 				  .SetLoops(4);
 
-			seq.OnComplete(() => { resultPanel.SetActive(false); });
+			digitalScreenSeq.OnComplete(() => { resultPanel.SetActive(false); });
 		}
 
 		#region Memory Panel
@@ -196,6 +201,7 @@ namespace Cashier
 				shownProductIndex++;
 				// W75_AudioManager.instance.PlayOneShot("CorrectOnPanel");
 				questionCorrectCount++;
+				AudioManager.instance.PlayOneShot(SoundType.CorrectOnPanel);
 				questionCorrect.enabled = true;
 				questionCorrect.transform.DOShakePosition(0.3f, 0.5f);
 
@@ -219,6 +225,7 @@ namespace Cashier
 					// LevelUp(false);
 				}
 
+				AudioManager.instance.PlayOneShot(SoundType.Wrong);
 				questionWrong.enabled = true;
 				questionWrong.transform.DOShakePosition(0.3f, 0.5f);
 

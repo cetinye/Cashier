@@ -88,14 +88,15 @@ namespace Cashier
 
 	public enum SoundType
 	{
-		BackgroundGrill,
 		Background,
-		MeatOnGrill_1,
-		MeatOnGrill_2,
-		MeatOnGrill_3,
+		Barcode,
 		Correct,
+		CorrectOnPanel,
+		OneNumber,
+		TwoNumber,
+		ThreeNumber,
 		Wrong,
-		Burn
+		TimesUp,
 	}
 
 	[System.Serializable]

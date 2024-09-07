@@ -12,6 +12,7 @@ namespace Cashier
 		{
 			if (isPressable)
 			{
+				AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 				levelManager.NumberPressed(value);
 			}
 		}

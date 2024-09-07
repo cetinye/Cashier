@@ -43,6 +43,7 @@ namespace Cashier
 
 		void Start()
 		{
+			AudioManager.instance.Play(SoundType.Background);
 			StartGame();
 		}
 
@@ -89,10 +90,12 @@ namespace Cashier
 					break;
 
 				case GameState.BarcodeShow:
+					OnProductMidPos(true);
 					GenerateBarcode();
 					break;
 
 				case GameState.EnterBarcode:
+					OnProductMidPos(false);
 					uiManager.SetProductOnCashbox(chosenProductSp);
 					Number.isPressable = true;
 					uiManager.SetCashboxTextState(false);
@@ -156,6 +159,7 @@ namespace Cashier
 			if (GameStateManager.GetGameState() != GameState.EnterBarcode)
 				return;
 
+			AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 			if (pressedNumbers.Count > 0)
 			{
 				pressedNumbers.RemoveAt(pressedNumbers.Count - 1);
@@ -171,6 +175,7 @@ namespace Cashier
 			if (!enterPressed)
 				enterPressed = true;
 
+			AudioManager.instance.PlayOneShot(SoundType.OneNumber);
 			GameStateManager.SetGameState(GameState.Idle);
 
 			List<int> barcode = new List<int>(barcodeController.GetBarcode());
@@ -196,6 +201,7 @@ namespace Cashier
 		public void Correct()
 		{
 			correct++;
+			AudioManager.instance.PlayOneShot(SoundType.Correct);
 			uiManager.GiveCashboxFeedback(true);
 
 			DOTween.Sequence()
@@ -216,6 +222,7 @@ namespace Cashier
 			wrong++;
 			float rotation = 15f;
 
+			AudioManager.instance.PlayOneShot(SoundType.Wrong);
 			uiManager.GiveCashboxFeedback(false);
 
 			Sequence seq = DOTween.Sequence()
@@ -278,6 +285,14 @@ namespace Cashier
 
 			PlayerPrefs.SetInt("Cashier_UpCounter", upCounter);
 			PlayerPrefs.SetInt("Cashier_DownCounter", downCounter);
+		}
+
+		private void OnProductMidPos(bool state)
+		{
+			barcodeController.SetScanImage(state);
+
+			if (state)
+				AudioManager.instance.PlayOneShot(SoundType.Barcode);
 		}
 
 		private void Reset()
