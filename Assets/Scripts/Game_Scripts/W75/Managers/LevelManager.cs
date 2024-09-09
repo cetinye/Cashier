@@ -44,6 +44,7 @@ namespace Cashier
 		void Start()
 		{
 			AudioManager.instance.Play(SoundType.Background);
+			uiManager.ShowLevelId(levelId);
 			StartGame();
 		}
 
@@ -285,6 +286,8 @@ namespace Cashier
 
 			PlayerPrefs.SetInt("Cashier_UpCounter", upCounter);
 			PlayerPrefs.SetInt("Cashier_DownCounter", downCounter);
+
+			uiManager.ShowLevelId(levelId);
 		}
 
 		private void OnProductMidPos(bool state)

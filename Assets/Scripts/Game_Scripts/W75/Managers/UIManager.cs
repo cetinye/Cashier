@@ -9,8 +9,6 @@ namespace Cashier
 {
 	public class UIManager : MonoBehaviour
 	{
-		[SerializeField] private LevelManager levelManager;
-
 		[Header("Cashbox UI Elements")]
 		[SerializeField] private TMP_Text textOnCashbox;
 		[SerializeField] private TMP_Text textOnDigitalScreen;
@@ -21,6 +19,7 @@ namespace Cashier
 		[SerializeField] private TMP_Text resultTxt;
 		[SerializeField] private Image resultSp;
 		[SerializeField] private GameObject resultPanel;
+		[SerializeField] private TMP_Text levelIdText;
 
 		[Header("Timer Variables")]
 		[SerializeField] private TMP_Text timerText;
@@ -89,6 +88,18 @@ namespace Cashier
 		public void ClearLevelTimer()
 		{
 			timerText.text = "";
+		}
+
+		public void ShowLevelId(int levelId)
+		{
+			levelIdText.DOFade(0, 0);
+			levelIdText.text = "Level " + levelId;
+			levelIdText.DOFade(1, 0.5f).SetLoops(2, LoopType.Yoyo);
+			levelIdText.transform.DOScale(1.2f, 1f).OnComplete(() =>
+			{
+				levelIdText.DOFade(0, 0f);
+				levelIdText.transform.DOScale(1f, 0f);
+			});
 		}
 
 		public void SetCashboxTextState(bool value)
