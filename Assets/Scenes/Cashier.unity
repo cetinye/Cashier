@@ -2066,6 +2066,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10b5e4f5f65c622488685fabd4e908f6, type: 2}
   - {fileID: 11400000, guid: e0741f4fa03db414d8c1bbd99f87994f, type: 2}
   - {fileID: 11400000, guid: 88867ddc1fc21774184b5d3e07e40f6c, type: 2}
+  - {fileID: 11400000, guid: 47bafebd7ea22c14e92b2c48378ce84f, type: 2}
+  - {fileID: 11400000, guid: 33cb162cb13fbe2468432f01d3df82e5, type: 2}
+  - {fileID: 11400000, guid: 2d02e72e8d8ed954b9f26ead782530cf, type: 2}
+  - {fileID: 11400000, guid: 793f0446cf3b6194caef0622c7280610, type: 2}
+  - {fileID: 11400000, guid: 08a44e38988823042a70e7a8f8ce8bfc, type: 2}
+  - {fileID: 11400000, guid: f411fc0987d5a2e44a817a8fe5e86d53, type: 2}
+  - {fileID: 11400000, guid: b7019e8f83be57b42a17fc7b87e15f29, type: 2}
+  - {fileID: 11400000, guid: 2d984a8ab882f654ea18e34618195eaf, type: 2}
+  - {fileID: 11400000, guid: 57d8d5b1f68a1834e998ee3577fac8e8, type: 2}
+  - {fileID: 11400000, guid: c667d53aa6899a8499e9d21479055f22, type: 2}
+  - {fileID: 11400000, guid: f6450c6a131ba744c99809254e885406, type: 2}
+  - {fileID: 11400000, guid: a671caa3db254464dafa57bc217f85c9, type: 2}
+  - {fileID: 11400000, guid: 7feeeee1717d31b42a345bd0c6c00ac2, type: 2}
+  - {fileID: 11400000, guid: 8b4f9722684b667488914d4629949168, type: 2}
   uiManager: {fileID: 2110600494}
   barcodeController: {fileID: 770083719}
   productSprites:

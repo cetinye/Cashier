@@ -16,8 +16,8 @@ MonoBehaviour:
   numOfItemsDisplayedPerLevel: 10
   maxBarcodeLength: 7
   barcodeLength: 3
-  barcodeEntryTime: 8
-  barcodeDigitOrder: 2
+  barcodeEntryTime: 10
+  barcodeDigitOrder: 3
   barcodeDisplayFormat: 1
   numOfQuestionsToLevelUp: 1
   numOfQuestionsToLevelDown: 1

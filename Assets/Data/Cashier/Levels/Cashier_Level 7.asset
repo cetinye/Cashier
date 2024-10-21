@@ -16,13 +16,13 @@ MonoBehaviour:
   numOfItemsDisplayedPerLevel: 10
   maxBarcodeLength: 7
   barcodeLength: 4
-  barcodeEntryTime: 8
+  barcodeEntryTime: 10
   barcodeDigitOrder: 2
-  barcodeDisplayFormat: 1
+  barcodeDisplayFormat: 2
   numOfQuestionsToLevelUp: 2
   numOfQuestionsToLevelDown: 1
   totalItemsShownInEndGame: 6
   totalNumberOfFakeItems: 2
-  pointsPerCorrectAnswer: 134
-  maxInGame: 1340
+  pointsPerCorrectAnswer: 128
+  maxInGame: 1276
   penaltyPoints: 500

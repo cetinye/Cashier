@@ -3,7 +3,8 @@ namespace Cashier
 	public enum BarcodeDigitOrder
 	{
 		Sequential = 1,
-		Random = 2
+		SequentialRandom = 2,
+		Random = 3
 	}
 
 	public enum BarcodeDisplayFormat

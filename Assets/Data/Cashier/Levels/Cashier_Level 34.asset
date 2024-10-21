@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: 34
   numOfItemsDisplayedPerLevel: 10
-  maxBarcodeLength: 9
-  barcodeLength: 9
-  barcodeEntryTime: 8
-  barcodeDigitOrder: 1
+  maxBarcodeLength: 7
+  barcodeLength: 6
+  barcodeEntryTime: 10
+  barcodeDigitOrder: 3
   barcodeDisplayFormat: 3
-  numOfQuestionsToLevelUp: 7
-  numOfQuestionsToLevelDown: 3
-  totalItemsShownInEndGame: 10
+  numOfQuestionsToLevelUp: 5
+  numOfQuestionsToLevelDown: 2
+  totalItemsShownInEndGame: 9
   totalNumberOfFakeItems: 3
-  pointsPerCorrectAnswer: 500
-  maxInGame: 5003
+  pointsPerCorrectAnswer: 454
+  maxInGame: 4538
   penaltyPoints: 500

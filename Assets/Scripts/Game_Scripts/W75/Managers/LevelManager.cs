@@ -44,6 +44,7 @@ namespace Cashier
 		void Start()
 		{
 			AudioManager.instance.Play(SoundType.Background);
+			AssignLevel();
 			uiManager.ShowLevelId(levelId);
 			StartGame();
 		}
@@ -259,6 +260,8 @@ namespace Cashier
 					Debug.Log($"Level changed to : {levelId}");
 					// gameScoreViewModel.level = level;
 					PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+
+					uiManager.ShowLevelId(levelId);
 				}
 			}
 			else
@@ -277,6 +280,8 @@ namespace Cashier
 					Debug.Log($"Level changed to : {levelId}");
 					// gameScoreViewModel.level = level;
 					PlayerPrefs.SetInt("Cashier_LevelId", levelId);
+
+					uiManager.ShowLevelId(levelId);
 				}
 			}
 
@@ -286,8 +291,6 @@ namespace Cashier
 
 			PlayerPrefs.SetInt("Cashier_UpCounter", upCounter);
 			PlayerPrefs.SetInt("Cashier_DownCounter", downCounter);
-
-			uiManager.ShowLevelId(levelId);
 		}
 
 		private void OnProductMidPos(bool state)

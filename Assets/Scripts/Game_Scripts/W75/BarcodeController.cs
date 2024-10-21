@@ -194,8 +194,25 @@ namespace Cashier
 				indexToShow_1 = i;
 				indexToShow_2 = i + 1;
 
+				// if sequentialRandom
+				if (barcodeDigitOrder == BarcodeDigitOrder.SequentialRandom)
+				{
+					do
+					{
+						indexToShow_1 = Random.Range(0, barcode.Count);
+					} while (shownIndexes.Contains(indexToShow_1) || indexToShow_1 % 2 == 1);
+					shownIndexes.Add(indexToShow_1);
+
+					indexToShow_2 = indexToShow_1 + 1;
+					if (indexToShow_2 <= barcode.Count - 1)
+					{
+						indexToShow_2 = indexToShow_1 + 1;
+						shownIndexes.Add(indexToShow_2);
+					}
+				}
+
 				// if not sequential get random index
-				if (barcodeDigitOrder == BarcodeDigitOrder.Random)
+				else if (barcodeDigitOrder == BarcodeDigitOrder.Random)
 				{
 					do
 					{
@@ -203,6 +220,7 @@ namespace Cashier
 					} while (shownIndexes.Contains(indexToShow_1));
 					shownIndexes.Add(indexToShow_1);
 
+					indexToShow_2 = indexToShow_1 + 1;
 					if (indexToShow_2 <= barcode.Count - 1)
 					{
 						do
@@ -212,7 +230,8 @@ namespace Cashier
 						shownIndexes.Add(indexToShow_2);
 					}
 				}
-				else
+
+				else if (barcodeDigitOrder == BarcodeDigitOrder.Sequential)
 				{
 					shownIndexes.Add(indexToShow_1);
 					shownIndexes.Add(indexToShow_2);
@@ -275,8 +294,34 @@ namespace Cashier
 				indexToShow_2 = i + 1;
 				indexToShow_3 = i + 2;
 
+				// if sequentialRandom
+				if (barcodeDigitOrder == BarcodeDigitOrder.SequentialRandom)
+				{
+					do
+					{
+						indexToShow_1 = Random.Range(0, barcode.Count);
+					} while (shownIndexes.Contains(indexToShow_1) || indexToShow_1 % 3 != 0);
+					shownIndexes.Add(indexToShow_1);
+
+					if (!shownIndexes.Contains(indexToShow_1 + 1) && indexToShow_1 + 1 <= barcode.Count - 1)
+					{
+						indexToShow_2 = indexToShow_1 + 1;
+						shownIndexes.Add(indexToShow_2);
+					}
+					else
+						indexToShow_2 = 99;
+
+					if (!shownIndexes.Contains(indexToShow_2 + 1) && indexToShow_2 + 1 <= barcode.Count - 1)
+					{
+						indexToShow_3 = indexToShow_2 + 1;
+						shownIndexes.Add(indexToShow_3);
+					}
+					else
+						indexToShow_3 = 99;
+				}
+
 				// if not sequential get random index
-				if (barcodeDigitOrder == BarcodeDigitOrder.Random)
+				else if (barcodeDigitOrder == BarcodeDigitOrder.Random)
 				{
 					do
 					{
@@ -302,7 +347,8 @@ namespace Cashier
 						shownIndexes.Add(indexToShow_3);
 					}
 				}
-				else
+
+				else if (barcodeDigitOrder == BarcodeDigitOrder.Sequential)
 				{
 					shownIndexes.Add(indexToShow_1);
 					shownIndexes.Add(indexToShow_2);
